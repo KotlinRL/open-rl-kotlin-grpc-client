@@ -1,89 +1,106 @@
 
-# Open RL Env (KotlinRL): Standard RL Environment gRPC Protocol
+# 🚀 Open RL Kotlin gRPC Client
 
-**Open RL Env** defines a universal [gRPC](https://grpc.io/) Protocol Buffers specification for reinforcement learning (RL) environments, making it easy to serve environments (like OpenAI Gymnasium) and connect agents from any language.
-
----
-
-## 🚩 Purpose
-
-- Provide a **canonical RL environment API** via Protocol Buffers.
-- Enable **gRPC-based serving** of environments (e.g., Gymnasium, PettingZoo, Unity, custom).
-- Allow **RL clients and agents in any language** (Kotlin, Python, Java, Go, etc.) to interact with environments for RL training and evaluation.
+A high-performance, idiomatic **Kotlin client for the Open RL Environment gRPC protocol**—enabling reinforcement learning (RL) agents and tools written in Kotlin or Java to interact with any gRPC-served RL environment, including [OpenAI Gymnasium](https://gymnasium.farama.org/), PettingZoo, and more.
 
 ---
 
 ## ✨ Features
 
-- **Standard gRPC API**: reset, step, action/observation space, render, frame streaming, and close.
-- **Supports discrete & continuous action spaces**.
-- **Multi-backend ready**: Gymnasium and more.
-- **Multi-language client/server stubs** via codegen.
+- **Strongly-typed Kotlin API** for RL environment interaction over gRPC
+- Connects to any server implementing the [Open RL Env proto](https://github.com/KotlinRL/open-rl-env/blob/main/Env.proto)
+- Supports all core RL operations: create, reset, step, space queries, render, and close
+- Designed for use with the [open-rl-gymnasium-grpc-server](https://github.com/KotlinRL/open-rl-gymnasium-grpc-server)
+- Multi-environment, multi-session capable
+- Compatible with JVM-based agents and frameworks
 
 ---
 
-## 🗂️ Project Structure
+## 🏗️ Project Structure
 
 ```
-open-rl-env/
-├── proto/
-│   └── Env.proto                           # The standard RL environment protobuf spec
-├── servers/
-│   └── open-rl-gymnasium-grpc-server/      # OpenAI Gymnasium 1.0.0 gRPC server implementation
-├── clients/
-│   ├── open-rl-kotlin-grpc-client/         # Kotlin client (done)
-│   └── open-rl-python-grpc-client/         # Python client (todo)
+open-rl-kotlin-grpc-client/
+├── proto/                      # Protobuf definitions git submodule
+├── src/
+│   ├── main/
+│   │   ├── kotlin/             # Kotlin source code for gRPC client
+│   └── test/                   # Example usage/tests
+├── build.gradle.kts            # Gradle build for easy integration
 └── README.md
 ```
 
 ---
+
 ## 🚀 Getting Started
 
-### 1. **Run the Gymnasium gRPC Server with Docker** (other env servers may follow)
+### 1. **Start a compatible RL Environment server**
 
-You can instantly serve OpenAI Gymnasium environments using the official Docker image:
+The easiest way is with the [open-rl-gymnasium-grpc-server Docker image](https://hub.docker.com/r/kotlinrl/open-rl-gymnasium-grpc-server):
 
 ```bash
-docker pull kotlinrl/open-rl-gymnasium-grpc-server:latest
 docker run --rm -p 50051:50051 kotlinrl/open-rl-gymnasium-grpc-server:latest
 ```
 
-The gRPC server will listen on port `50051`.
+---
+
+### 2. **Add the client to your Kotlin project**
+
+Clone this repo, or add as a module/dependency in your JVM project.
 
 ---
 
-### 2. **Connect With RL Agents**
+### 3. **Use the Kotlin client in your RL agent**
 
-Select your language of choice (Kotlin, Java, Python to follow, etc.) from the pre-build clients to interact with the server and perform RL training.
+#### **Sample Usage**
+
+```kotlin
+val env = RemoteEnv("CartPole-v1", host = "localhost", port = 50051)
+val actionSpace = env.actionSpace
+val observationSpace = env.observationSpace
+
+val (observation, info) = env.reset(seed = 123)
+while (true) {
+    val action = ... // Your agent's logic
+    val (nextObs, reward, terminated, truncated, stepInfo) = env.step(action)
+    if (terminated || truncated) break
+}
+env.close()
+```
 
 ---
 
-### 3. **Serve Additional Backends**
+### 4. **Build and Run**
 
-You can implement other environment servers (e.g., PettingZoo, Unity) using the same protocol and client code—just swap the backend container!
+Standard Gradle JVM build:
+```bash
+./gradlew build
+./gradlew test
+```
 
 ---
-## 🌍 Why Use Open RL Env?
 
-- **Decouple agent and environment codebases**
-- **Train RL agents from any language**
-- **Deploy environments remotely (cloud, cluster, desktop)**
-- **Standardizes RL research and production pipelines**
+## 🌍 Why Use Open RL Kotlin Client?
+
+- Train RL agents in Kotlin/Java with any gRPC-served environment
+- Interoperate with Python-based environments (Gymnasium, PettingZoo, Unity, etc)
+- Leverage type-safe, idiomatic Kotlin for RL research and engineering
+- Power distributed, scalable, cross-language RL workflows
 
 ---
 
 ## 📚 Resources
 
+- [Open RL Env Proto](https://github.com/KotlinRL/open-rl-env)
 - [Gymnasium Documentation](https://gymnasium.farama.org/)
-- [gRPC Documentation](https://grpc.io/docs/)
 - [KotlinRL Project](https://github.com/KotlinRL)
+- [open-rl-gymnasium-grpc-server](https://github.com/KotlinRL/open-rl-gymnasium-grpc-server)
 
 ---
 
 ## 🤝 Contributing
 
-PRs, issues, and discussion welcome!  
-Extend to new backends, support new environments, or improve the proto—join the [KotlinRL](https://github.com/KotlinRL) community.
+Contributions, bug reports, and feature suggestions welcome!  
+Open an issue or submit a pull request—join the [KotlinRL](https://github.com/KotlinRL) community.
 
 ---
 
@@ -93,4 +110,5 @@ Apache License Version 2.0
 
 ---
 
-> **Open RL Env:** Standardizing RL environment interfaces for a multi-language, multi-platform world.
+> **Open RL Kotlin gRPC Client:**  
+> The JVM-native way to connect RL agents to any modern RL environment—local, cloud, or distributed.
