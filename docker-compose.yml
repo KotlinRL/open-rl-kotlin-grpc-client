@@ -1,0 +1,8 @@
+version: "3.8"
+
+services:
+  open-rl-gymnasium-grpc-server:
+    image: kotlinrl/open-rl-gymnasium-grpc-server:latest
+    container_name: open-rl-gymnasium-grpc-server-testcontainer
+    ports:
+      - "50051:50051"

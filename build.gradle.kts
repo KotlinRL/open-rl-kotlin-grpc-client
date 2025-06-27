@@ -1,9 +1,11 @@
 import com.google.protobuf.gradle.id
+import org.gradle.kotlin.dsl.dockerCompose
 
 plugins {
     kotlin("jvm") version "1.9.21"
     java
     id("com.google.protobuf") version "0.9.4"
+    id("com.avast.gradle.docker-compose") version "0.17.12"
 }
 
 repositories {
@@ -71,4 +73,9 @@ sourceSets {
 
 tasks.named("build") {
     dependsOn("generateProto")
+}
+
+dockerCompose {
+    useComposeFiles = listOf("docker-compose.yml")
+    isRequiredBy(tasks.test)
 }
