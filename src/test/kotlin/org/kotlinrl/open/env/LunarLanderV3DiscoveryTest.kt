@@ -43,7 +43,7 @@ class LunarLanderV3DiscoveryTest : StringSpec({
         observation.array.dtype shouldBe float32
         println(observation.array.data.toFloatArray().map { "${it}f" })
         observation.array.data.toFloatArray().shouldBeWithinTolerance( floatArrayOf(0.0051769256f, 1.4033939f, 0.52433753f,
-            -0.33451712f, -0.0059918435f, -0.11877034f, 0.0f, 0.0f), 1e-6f)
+            -0.33451712f, -0.0059918435f, -0.11877034f, 0.0f, 0.0f))
 
         info shouldNotBe null
         info.dataMap shouldBe emptyMap()
