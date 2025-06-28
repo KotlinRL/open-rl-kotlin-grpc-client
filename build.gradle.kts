@@ -13,7 +13,7 @@ repositories {
 }
 
 group = "org.kotlin-reinforcement-learning"
-version = "0.1.0-SNAPSHOT"
+version = "0.1.0"
 
 dependencies {
     implementation(kotlin("stdlib"))
