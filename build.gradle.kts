@@ -6,6 +6,7 @@ plugins {
     java
     id("com.google.protobuf") version "0.9.4"
     id("com.avast.gradle.docker-compose") version "0.17.12"
+    id("maven-publish")
 }
 
 repositories {
@@ -78,4 +79,23 @@ tasks.named("build") {
 dockerCompose {
     useComposeFiles = listOf("docker-compose.yml")
     isRequiredBy(tasks.test)
+}
+configure<PublishingExtension> {
+    publications {
+        create<MavenPublication>("gpr") {
+            from(components["java"])
+            groupId = project.group as String?
+            artifactId = "open-rl-kotlin-grpc-client"
+            version = project.version as String?
+        }
+    }
+    repositories {
+        maven {
+            url = uri("https://maven.pkg.github.com/KotlinRL/open-rl-kotlin-grpc-client")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
