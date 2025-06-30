@@ -14,7 +14,7 @@ repositories {
 }
 
 group = "org.kotlin-reinforcement-learning"
-version = "0.1.0"
+version = "0.1.1"
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -85,10 +85,17 @@ configure<PublishingExtension> {
         create<MavenPublication>("gpr") {
             from(components["java"])
             groupId = project.group as String?
-            artifactId = "open-rl-kotlin-grpc-client"
+            artifactId = project.name
+            version = project.version as String?
+        }
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            groupId = project.group as String?
+            artifactId = project.name
             version = project.version as String?
         }
     }
+
     repositories {
         maven {
             url = uri("https://maven.pkg.github.com/KotlinRL/open-rl-kotlin-grpc-client")
