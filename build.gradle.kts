@@ -6,7 +6,7 @@ plugins {
     java
     id("com.google.protobuf") version "0.9.4"
     id("com.avast.gradle.docker-compose") version "0.17.12"
-    id("org.jreleaser") version "1.12.0"
+    id("org.jreleaser") version "1.19.0"
 }
 
 repositories {
