@@ -127,9 +127,6 @@ signing {
 
 jreleaser {
     project {
-        name = project.name
-        version = project.version.toString()
-        description = project.description
         license = "Apache-2.0"
         authors = listOf("Daniel Krieg <daniel_krieg@mac.com>")
     }
