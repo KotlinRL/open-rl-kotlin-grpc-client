@@ -7,14 +7,15 @@ plugins {
     id("com.google.protobuf") version "0.9.4"
     id("com.avast.gradle.docker-compose") version "0.17.12"
     id("maven-publish")
+    id("signing")
 }
 
 repositories {
     mavenCentral()
 }
 
-group = "org.kotlin-reinforcement-learning"
-version = "0.1.1"
+group = "io.github.kotlinrl"
+version = "0.1.0-SNAPSHOT"
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -80,29 +81,66 @@ dockerCompose {
     useComposeFiles = listOf("docker-compose.yml")
     isRequiredBy(tasks.test)
 }
-configure<PublishingExtension> {
+publishing {
     publications {
-        create<MavenPublication>("gpr") {
+        create<MavenPublication>("mavenJava") {
             from(components["java"])
-            groupId = project.group as String?
-            artifactId = project.name
-            version = project.version as String?
-        }
-//        create<MavenPublication>("mavenJava") {
-//            from(components["java"])
-//            groupId = project.group as String?
-//            artifactId = project.name
-//            version = project.version as String?
-//        }
-    }
-
-    repositories {
-        maven {
-            url = uri("https://maven.pkg.github.com/KotlinRL/open-rl-kotlin-grpc-client")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+            groupId = "io.github.kotlinrl"
+            artifactId = "open-rl-kotlin-grpc-client"
+            version = project.version.toString()
+            pom {
+                name.set("Open RL Kotlin gRPC Client")
+                description.set("A Kotlin client for Open RL Env Servers")
+                url.set("https://github.com/KotlinRL/open-rl-kotlin-grpc-client")
+                licenses {
+                    license {
+                        name.set("Apache License 2.0")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("dkrieg")
+                        name.set("Daniel Krieg")
+                        email.set("daniel_krieg@mac.com")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:https://github.com/KotlinRL/open-rl-kotlin-grpc-client.git")
+                    developerConnection.set("scm:git:ssh://git@github.com:KotlinRL/open-rl-kotlin-grpc-client.git")
+                    url.set("https://github.com/KotlinRL/open-rl-kotlin-grpc-client")
+                }
             }
         }
+    }
+    repositories {
+        maven {
+            name = "OSSRH"
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = findProperty("OSSRH_USERNAME") as String?
+                password = findProperty("OSSRH_PASSWORD") as String?
+            }
+        }
+        maven {
+            name = "OSSRH-Snapshots"
+            url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            credentials {
+                username = findProperty("OSSRH_USERNAME") as String?
+                password = findProperty("OSSRH_PASSWORD") as String?
+            }
+        }
+    }
+}
+signing {
+    val signingKey: String? = findProperty("SIGNING_SECRET_KEY") as String?
+    val signingPassword: String? = findProperty("SIGNING_PASSWORD") as String?
+
+    // Only configure signing if key and password are available
+    isRequired = signingKey != null && signingPassword != null
+
+    if (isRequired) {
+        useInMemoryPgpKeys(signingKey, signingPassword)
+        sign(publishing.publications["mavenJava"])
     }
 }
