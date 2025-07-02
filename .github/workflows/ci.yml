@@ -36,7 +36,7 @@ jobs:
         env:
           JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run JReleaser full-release
-        run: jreleaser full-release -c .jreleaser/config.yml
+        run: jreleaser full-release
         env:
           JRELEASER_MAVEN_CENTRAL_USERNAME: ${{ secrets.OSSRH_TOKEN_USERNAME }}
           JRELEASER_MAVEN_CENTRAL_PASSWORD: ${{ secrets.OSSRH_TOKEN_PASSWORD }}
