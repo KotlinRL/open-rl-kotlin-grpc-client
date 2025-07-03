@@ -36,7 +36,7 @@ jobs:
           echo "Public key ends with:"
           echo "${JRELEASER_GPG_PUBLIC_KEY}" | tail -5
         env:
-          JRELEASER_GPG_PUBLIC_KEY: ${{ secrets.JRELEASER_GPG_PUBLIC_KEY }}
+          JRELEASER_GPG_PUBLIC_KEY: ${{ secrets.SIGNING_PUBLIC_KEY }}
       - name: Release with JReleaser (via Gradle)
         env:
           JRELEASER_GPG_SECRET_KEY: ${{ secrets.SIGNING_PUBLIC_KEY }}
