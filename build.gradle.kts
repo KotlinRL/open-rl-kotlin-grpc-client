@@ -34,6 +34,7 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:5.8.0")
     testImplementation("io.kotest:kotest-property:5.8.0")
 }
+
 java {
     withJavadocJar()
     withSourcesJar()
@@ -41,12 +42,15 @@ java {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
+
 kotlin {
     jvmToolchain(17)
 }
+
 tasks.withType<Test> {
     useJUnitPlatform() // Enable JUnit 5
 }
+
 protobuf {
     protoc {
         artifact = "com.google.protobuf:protoc:3.24.0" // Protobuf compiler
@@ -85,6 +89,7 @@ dockerCompose {
     useComposeFiles = listOf("docker-compose.yml")
     isRequiredBy(tasks.test)
 }
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
