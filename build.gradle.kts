@@ -142,11 +142,11 @@ jreleaser {
         maven {
             mavenCentral {
                 active = ALWAYS
-                register("sonatype") {
-                    active = ALWAYS
-                    url = "https://central.sonatype.com/api/v1/publisher"
-                    stagingRepository(layout.buildDirectory.dir("staging-deploy").get().asFile.path)
-                }
+//                register("sonatype") {
+//                    active = ALWAYS
+//                    url = "https://central.sonatype.com/api/v1/publisher"
+//                    stagingRepository(layout.buildDirectory.dir("staging-deploy").get().asFile.path)
+//                }
             }
         }
     }
