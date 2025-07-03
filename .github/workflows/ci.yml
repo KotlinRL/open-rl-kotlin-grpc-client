@@ -29,12 +29,9 @@ jobs:
             gradle-${{ runner.os }}-
       - name: Build and test
         run: ./gradlew --no-daemon clean build
-      - name: Debug JRELEASER_GPG_PUBLIC_KEY
+      - name: Check public key length
         run: |
-          echo "Public key starts with:"
-          echo "${JRELEASER_GPG_PUBLIC_KEY}" | head -5
-          echo "Public key ends with:"
-          echo "${JRELEASER_GPG_PUBLIC_KEY}" | tail -5
+          echo "${JRELEASER_GPG_PUBLIC_KEY}" | wc -l
         env:
           JRELEASER_GPG_PUBLIC_KEY: ${{ secrets.SIGNING_PUBLIC_KEY }}
       - name: Release with JReleaser (via Gradle)
