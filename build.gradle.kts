@@ -121,32 +121,17 @@ publishing {
             }
         }
     }
-    repositories {
-        maven {
-            url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
-        }
-    }
 }
 
 jreleaser {
-    gitRootSearch = true
-    project {
+        project {
         license = "Apache-2.0"
         authors = listOf("Daniel Krieg <daniel_krieg@mac.com>")
-    }
-    assemble {
-        active.set(ALWAYS)
-        enabled.set(true)
     }
     deploy {
         maven {
             mavenCentral {
                 active = ALWAYS
-//                register("sonatype") {
-//                    active = ALWAYS
-//                    url = "https://central.sonatype.com/api/v1/publisher"
-//                    stagingRepository(layout.buildDirectory.dir("staging-deploy").get().asFile.path)
-//                }
             }
         }
     }
