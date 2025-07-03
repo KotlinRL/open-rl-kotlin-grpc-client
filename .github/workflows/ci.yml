@@ -27,16 +27,6 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             gradle-${{ runner.os }}-
-      - name: Print JReleaser deployer envs
-        run: |
-          echo "USERNAME: $JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_USERNAME"
-          echo "PASSWORD: $JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_PASSWORD"
-          [ -z "$JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_USERNAME" ] && echo "USERNAME IS EMPTY"
-          [ -z "$JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_PASSWORD" ] && echo "PASSWORD IS EMPTY"
-        env:
-          JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_USERNAME: ${{ secrets.OSSRH_TOKEN_USERNAME }}
-          JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_PASSWORD: ${{ secrets.OSSRH_TOKEN_PASSWORD }}
-
       - name: Build, Test, Publish and Release
         run: ./gradlew --no-daemon clean build publishToMavenLocal jreleaserFullRelease
         env:
