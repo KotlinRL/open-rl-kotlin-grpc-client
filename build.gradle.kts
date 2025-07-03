@@ -9,7 +9,6 @@ plugins {
     id("com.avast.gradle.docker-compose") version "0.17.12"
     id("maven-publish")
     id("org.jreleaser") version "1.19.0"
-    id("signing")
 }
 
 repositories {
@@ -116,13 +115,6 @@ publishing {
             }
         }
     }
-}
-signing {
-    useInMemoryPgpKeys(
-        System.getenv("GPG_PRIVATE_KEY"),
-        System.getenv("GPG_PASSPHRASE")
-    )
-    sign(publishing.publications["mavenJava"])
 }
 
 jreleaser {
