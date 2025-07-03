@@ -133,7 +133,7 @@ jreleaser {
     deploy {
         maven {
             mavenCentral {
-
+                active = ALWAYS
             }
         }
     }
