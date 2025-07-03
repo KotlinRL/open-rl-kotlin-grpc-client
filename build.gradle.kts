@@ -3,7 +3,6 @@ import org.gradle.kotlin.dsl.proto
 
 plugins {
     kotlin("jvm") version "1.9.21"
-    java
     id("com.google.protobuf") version "0.9.4"
     id("com.avast.gradle.docker-compose") version "0.17.12"
     id("com.vanniktech.maven.publish") version "0.33.0"
@@ -31,14 +30,6 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
     testImplementation("io.kotest:kotest-assertions-core:5.8.0")
     testImplementation("io.kotest:kotest-property:5.8.0")
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
 }
 
 kotlin {
