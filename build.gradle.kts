@@ -1,15 +1,12 @@
 import com.google.protobuf.gradle.id
 import org.gradle.kotlin.dsl.proto
-import org.jreleaser.gradle.plugin.JReleaserExtension
-import org.jreleaser.model.Active.*
 
 plugins {
     kotlin("jvm") version "1.9.21"
     java
     id("com.google.protobuf") version "0.9.4"
     id("com.avast.gradle.docker-compose") version "0.17.12"
-    id("maven-publish")
-    id("org.jreleaser") version "1.19.0"
+    id("com.vanniktech.maven.publish") version "0.33.0"
 }
 
 repositories {
@@ -91,52 +88,34 @@ dockerCompose {
     isRequiredBy(tasks.test)
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
+mavenPublishing {
+    publishToMavenCentral()
 
-            pom {
-                name.set("Open RL Kotlin gRPC Client")
-                description.set(project.description)
-                url.set("https://github.com/kotlinrl/open-rl-kotlin-grpc-client")
-                licenses {
-                    license {
-                        name.set("Apache License 2.0")
-                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("dkrieg")
-                        name.set("Daniel Krieg")
-                        email.set("daniel_krieg@mac.com")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:https://github.com/kotlinrl/open-rl-kotlin-grpc-client.git")
-                    developerConnection.set("scm:git:ssh://github.com:kotlinrl/open-rl-kotlin-grpc-client.git")
-                    url.set("https://github.com/kotlinrl/open-rl-kotlin-grpc-client")
-                }
+    signAllPublications()
+
+    coordinates(group.toString(), project.name, version.toString())
+
+    pom {
+        name.set("Open RL Kotlin gRPC Client")
+        description.set(project.description)
+        url.set("https://github.com/kotlinrl/open-rl-kotlin-grpc-client")
+        licenses {
+            license {
+                name.set("Apache License 2.0")
+                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
             }
         }
-    }
-}
-
-jreleaser {
-        project {
-        license = "Apache-2.0"
-        authors = listOf("Daniel Krieg <daniel_krieg@mac.com>")
-    }
-    deploy {
-        maven {
-            mavenCentral {
-                active = ALWAYS
+        developers {
+            developer {
+                id.set("dkrieg")
+                name.set("Daniel Krieg")
+                email.set("daniel_krieg@mac.com")
             }
         }
-    }
-    signing {
-        active.set(ALWAYS)
-        armored = true
+        scm {
+            connection.set("scm:git:https://github.com/kotlinrl/open-rl-kotlin-grpc-client.git")
+            developerConnection.set("scm:git:ssh://github.com:kotlinrl/open-rl-kotlin-grpc-client.git")
+            url.set("https://github.com/kotlinrl/open-rl-kotlin-grpc-client")
+        }
     }
 }
