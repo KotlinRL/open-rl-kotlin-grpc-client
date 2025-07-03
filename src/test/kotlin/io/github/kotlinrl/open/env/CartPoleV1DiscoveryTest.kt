@@ -1,57 +1,58 @@
-package org.kotlinrl.open.env
+package io.github.kotlinrl.open.env
 
 import io.kotest.core.spec.style.*
 import io.kotest.matchers.*
 import open.rl.env.EnvOuterClass.DType.*
 import open.rl.env.EnvOuterClass.Observation.ValueCase.*
 import open.rl.env.EnvOuterClass.Space.TypeCase.*
+import kotlin.Float.Companion.NEGATIVE_INFINITY
+import kotlin.Float.Companion.POSITIVE_INFINITY
 
-class LunarLanderV3DiscoveryTest : StringSpec({
-    "LunarLander-v3 should have action space of DiscreteSpace" {
-        val env = RemoteEnv("LunarLander-v3")
+class CartPoleV1DiscoveryTest : StringSpec({
+    "CartPole-v1 should have action space of DiscreteSpace" {
+        val env = RemoteEnv("CartPole-v1")
         val actionSpace = env.actionSpace
         actionSpace.typeCase shouldBe DISCRETE
         val discrete = actionSpace.discrete
-        discrete.n shouldBe 4
+        discrete.n shouldBe 2
         discrete.start shouldBe 0.0f
         env.close()
     }
 
-    "LunarLander-v3 should have observation space of BoxSpace" {
-        val env = RemoteEnv("LunarLander-v3")
+    "CartPole-v1 should have observation space of BoxSpace" {
+        val env = RemoteEnv("CartPole-v1")
         val observationSpace = env.observationSpace
         observationSpace.typeCase shouldBe BOX
         val box = observationSpace.box
-        box.low.shapeList shouldBe listOf(8)
+        box.low.shapeList shouldBe listOf(4)
         box.low.dtype shouldBe float32
-        box.low.data.toFloatArray() shouldBe floatArrayOf(-2.5f, -2.5f, -10.0f, -10.0f, -6.2831855f, -10.0f, -0.0f, -0.0f)
+        box.low.data.toFloatArray() shouldBe floatArrayOf(-4.8f, NEGATIVE_INFINITY, -0.41887903f, NEGATIVE_INFINITY)
 
-        box.high.shapeList shouldBe listOf(8)
+        box.high.shapeList shouldBe listOf(4)
         box.high.dtype shouldBe float32
-        box.high.data.toFloatArray() shouldBe floatArrayOf(2.5f, 2.5f, 10.0f, 10.0f, 6.2831855f, 10.0f, 1.0f, 1.0f)
+        box.high.data.toFloatArray() shouldBe floatArrayOf(4.8f, POSITIVE_INFINITY, 0.41887903f, POSITIVE_INFINITY)
 
-        box.shapeList shouldBe listOf(8)
+        box.shapeList shouldBe listOf(4)
         box.dtype shouldBe float32
+
         env.close()
     }
 
-    "LunarLander-v3 should have an expected initial observation" {
-        val env = RemoteEnv("LunarLander-v3")
+    "CartPole-v1 should have an expected initial observation" {
+        val env = RemoteEnv("CartPole-v1")
         val (observation, info) = env.reset(seed = 123)
         observation.valueCase shouldBe ARRAY
-        observation.array.shapeList shouldBe listOf(8)
+        observation.array.shapeList shouldBe listOf(4)
         observation.array.dtype shouldBe float32
-        println(observation.array.data.toFloatArray().map { "${it}f" })
-        observation.array.data.toFloatArray().shouldBeWithinTolerance( floatArrayOf(0.0051769256f, 1.4033939f, 0.52433753f,
-            -0.33451712f, -0.0059918435f, -0.11877034f, 0.0f, 0.0f))
+        observation.array.data.toFloatArray() shouldBe floatArrayOf(0.018235186f, -0.0446179f, -0.027964013f, -0.03156282f)
 
         info shouldNotBe null
         info.dataMap shouldBe emptyMap()
         env.close()
     }
 
-    "LunarLander-v3 should have metadata" {
-        val env = RemoteEnv("LunarLander-v3")
+    "CartPole-v1 should have metadata" {
+        val env = RemoteEnv("CartPole-v1")
         env.metadata shouldNotBe null
         val renderFps = env.metadata.fieldsMap["render_fps"]?.numberValue
         renderFps shouldBe 50.0

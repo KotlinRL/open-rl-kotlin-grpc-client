@@ -1,4 +1,4 @@
-package org.kotlinrl.open.env
+package io.github.kotlinrl.open.env
 
 import com.google.protobuf.ByteString
 import open.rl.env.EnvOuterClass.*
@@ -29,6 +29,24 @@ fun ByteString.toDoubleArray(): DoubleArray {
     val arr = DoubleArray(this.size() / 8)
     for (i in arr.indices) {
         arr[i] = bb.double
+    }
+    return arr
+}
+
+fun ByteString.toIntArray(): IntArray {
+    val bb = ByteBuffer.wrap(this.toByteArray()).order(ByteOrder.LITTLE_ENDIAN)
+    val arr = IntArray(this.size() / 4)
+    for (i in arr.indices) {
+        arr[i] = bb.int
+    }
+    return arr
+}
+
+fun ByteString.toLongArray(): LongArray {
+    val bb = ByteBuffer.wrap(this.toByteArray()).order(ByteOrder.LITTLE_ENDIAN)
+    val arr = LongArray(this.size() / 8)
+    for (i in arr.indices) {
+        arr[i] = bb.long
     }
     return arr
 }

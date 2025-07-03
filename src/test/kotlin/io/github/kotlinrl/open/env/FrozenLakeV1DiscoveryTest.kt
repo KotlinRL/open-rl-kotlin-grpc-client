@@ -1,8 +1,7 @@
-package org.kotlinrl.open.env
+package io.github.kotlinrl.open.env
 
 import io.kotest.core.spec.style.*
 import io.kotest.matchers.*
-import open.rl.env.EnvOuterClass.*
 import open.rl.env.EnvOuterClass.Observation.ValueCase.*
 import open.rl.env.EnvOuterClass.Space.TypeCase.*
 

@@ -1,20 +1,28 @@
 import com.google.protobuf.gradle.id
-import org.gradle.kotlin.dsl.dockerCompose
+import org.gradle.kotlin.dsl.proto
 
 plugins {
     kotlin("jvm") version "1.9.21"
-    java
     id("com.google.protobuf") version "0.9.4"
     id("com.avast.gradle.docker-compose") version "0.17.12"
-    id("maven-publish")
+    id("com.vanniktech.maven.publish") version "0.33.0"
+    id("pl.allegro.tech.build.axion-release") version "1.18.7"
 }
 
 repositories {
     mavenCentral()
 }
 
-group = "org.kotlin-reinforcement-learning"
-version = "0.1.1"
+group = "io.github.kotlinrl"
+description = "Kotlin gRPC + Protobuf Client library for Reinforcement Learning with Open RL gRPC Servers"
+
+scmVersion {
+    tag {
+        prefix = ""
+    }
+}
+
+project.version = scmVersion.version
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -31,17 +39,15 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:5.8.0")
     testImplementation("io.kotest:kotest-property:5.8.0")
 }
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
+
 kotlin {
     jvmToolchain(17)
 }
+
 tasks.withType<Test> {
     useJUnitPlatform() // Enable JUnit 5
 }
+
 protobuf {
     protoc {
         artifact = "com.google.protobuf:protoc:3.24.0" // Protobuf compiler
@@ -80,29 +86,35 @@ dockerCompose {
     useComposeFiles = listOf("docker-compose.yml")
     isRequiredBy(tasks.test)
 }
-configure<PublishingExtension> {
-    publications {
-        create<MavenPublication>("gpr") {
-            from(components["java"])
-            groupId = project.group as String?
-            artifactId = project.name
-            version = project.version as String?
-        }
-//        create<MavenPublication>("mavenJava") {
-//            from(components["java"])
-//            groupId = project.group as String?
-//            artifactId = project.name
-//            version = project.version as String?
-//        }
-    }
 
-    repositories {
-        maven {
-            url = uri("https://maven.pkg.github.com/KotlinRL/open-rl-kotlin-grpc-client")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+mavenPublishing {
+    publishToMavenCentral()
+
+    signAllPublications()
+
+    coordinates(group.toString(), project.name, version.toString())
+
+    pom {
+        name.set("Open RL Kotlin gRPC Client")
+        description.set(project.description)
+        url.set("https://github.com/kotlinrl/open-rl-kotlin-grpc-client")
+        licenses {
+            license {
+                name.set("Apache License 2.0")
+                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
             }
+        }
+        developers {
+            developer {
+                id.set("dkrieg")
+                name.set("Daniel Krieg")
+                email.set("daniel_krieg@mac.com")
+            }
+        }
+        scm {
+            connection.set("scm:git:https://github.com/kotlinrl/open-rl-kotlin-grpc-client.git")
+            developerConnection.set("scm:git:ssh://github.com:kotlinrl/open-rl-kotlin-grpc-client.git")
+            url.set("https://github.com/kotlinrl/open-rl-kotlin-grpc-client")
         }
     }
 }

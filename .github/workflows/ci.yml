@@ -27,5 +27,12 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             gradle-${{ runner.os }}-
-      - name: Build and test
-        run: ./gradlew clean build --no-daemon
+      - name: Build and Test
+        run: ./gradlew --no-daemon clean build
+      - name: Publish
+        run: ./gradlew publishToMavenCentral
+        env:
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRET_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_TOKEN_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_TOKEN_PASSWORD }}

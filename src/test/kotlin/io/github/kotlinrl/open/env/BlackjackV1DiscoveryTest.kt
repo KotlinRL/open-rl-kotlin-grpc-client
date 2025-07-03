@@ -1,4 +1,4 @@
-package org.kotlinrl.open.env
+package io.github.kotlinrl.open.env
 
 import io.kotest.core.spec.style.*
 import io.kotest.matchers.*

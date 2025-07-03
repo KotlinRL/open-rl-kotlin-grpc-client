@@ -1,4 +1,4 @@
-package org.kotlinrl.open.env
+package io.github.kotlinrl.open.env
 
 fun FloatArray.shouldBeWithinTolerance(expected: FloatArray, tolerance: Float = 1e-6f) {
     for (i in indices) {
