@@ -37,4 +37,4 @@ jobs:
           JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-        run: ./gradlew jreleaserFullRelease
+        run: ./gradlew jreleaserFullRelease --info
