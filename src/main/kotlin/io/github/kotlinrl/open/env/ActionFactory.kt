@@ -1,4 +1,4 @@
-package org.kotlinrl.open.env
+package io.github.kotlinrl.open.env
 
 import com.google.protobuf.ByteString
 import open.rl.env.EnvOuterClass.*

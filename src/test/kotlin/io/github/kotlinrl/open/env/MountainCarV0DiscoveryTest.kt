@@ -1,4 +1,4 @@
-package org.kotlinrl.open.env
+package io.github.kotlinrl.open.env
 
 import io.kotest.core.spec.style.*
 import io.kotest.matchers.*
@@ -6,28 +6,20 @@ import open.rl.env.EnvOuterClass.DType.*
 import open.rl.env.EnvOuterClass.Observation.ValueCase.*
 import open.rl.env.EnvOuterClass.Space.TypeCase.*
 
-class MountainCarContinuousV0DiscoveryTest : StringSpec({
-    "MountainCarContinuous-v0 should have action space of BoxSpace" {
-        val env = RemoteEnv("MountainCarContinuous-v0")
+class MountainCarV0DiscoveryTest : StringSpec({
+    "MountainCar-v0 should have action space of BoxSpace" {
+        val env = RemoteEnv("MountainCar-v0")
         val actionSpace = env.actionSpace
-        actionSpace.typeCase shouldBe BOX
-        val box = actionSpace.box
-        box.low.shapeList shouldBe listOf(1)
-        box.low.dtype shouldBe float32
-        box.low.data.toFloatArray() shouldBe floatArrayOf(-1.0f)
-
-        box.high.shapeList shouldBe listOf(1)
-        box.high.dtype shouldBe float32
-        box.high.data.toFloatArray() shouldBe floatArrayOf(1.0f)
-
-        box.shapeList shouldBe listOf(1)
-        box.dtype shouldBe float32
+        actionSpace.typeCase shouldBe DISCRETE
+        val discrete = actionSpace.discrete
+        discrete.n shouldBe 3
+        discrete.start shouldBe 0.0f
 
         env.close()
     }
 
-    "MountainCarContinuous-v0 should have observation space of BoxSpace" {
-        val env = RemoteEnv("MountainCarContinuous-v0")
+    "MountainCar-v0 should have observation space of BoxSpace" {
+        val env = RemoteEnv("MountainCar-v0")
         val observationSpace = env.observationSpace
         observationSpace.typeCase shouldBe BOX
         val box = observationSpace.box
@@ -45,8 +37,8 @@ class MountainCarContinuousV0DiscoveryTest : StringSpec({
         env.close()
     }
 
-    "MountainCarContinuous-v0 should have an expected initial observation" {
-        val env = RemoteEnv("MountainCarContinuous-v0")
+    "MountainCar-v0 should have an expected initial observation" {
+        val env = RemoteEnv("MountainCar-v0")
         val (observation, info) = env.reset(seed = 123)
         observation.valueCase shouldBe ARRAY
         observation.array.shapeList shouldBe listOf(2)
@@ -58,8 +50,8 @@ class MountainCarContinuousV0DiscoveryTest : StringSpec({
         env.close()
     }
 
-    "MountainCarContinuous-v0 should have metadata" {
-        val env = RemoteEnv("MountainCarContinuous-v0")
+    "MountainCar-v0 should have metadata" {
+        val env = RemoteEnv("MountainCar-v0")
         env.metadata shouldNotBe null
         val renderFps = env.metadata.fieldsMap["render_fps"]?.numberValue
         renderFps shouldBe 30.0

@@ -1,37 +1,36 @@
-package org.kotlinrl.open.env
+package io.github.kotlinrl.open.env
 
 import io.kotest.core.spec.style.*
 import io.kotest.matchers.*
-import open.rl.env.EnvOuterClass.*
 import open.rl.env.EnvOuterClass.Observation.ValueCase.*
 import open.rl.env.EnvOuterClass.Space.TypeCase.*
 
-class TaxiV3DiscoveryTest : StringSpec({
-    "Taxi-v3 should have action space of DiscreteSpace" {
-        val env = RemoteEnv("Taxi-v3")
+class CliffWalkingV0DiscoveryTest : StringSpec({
+    "CliffWalking-v0 should have action space of DiscreteSpace" {
+        val env = RemoteEnv("CliffWalking-v0")
         val actionSpace = env.actionSpace
         actionSpace.typeCase shouldBe DISCRETE
         val discrete = actionSpace.discrete
-        discrete.n shouldBe 6
+        discrete.n shouldBe 4
         discrete.start shouldBe 0.0f
         env.close()
     }
 
-    "Taxi-v3 should have observation space of DiscreteSpace" {
-        val env = RemoteEnv("Taxi-v3")
+    "CliffWalking-v0 should have observation space of DiscreteSpace" {
+        val env = RemoteEnv("CliffWalking-v0")
         val observationSpace = env.observationSpace
         observationSpace.typeCase shouldBe DISCRETE
         val discrete = observationSpace.discrete
-        discrete.n shouldBe 500
+        discrete.n shouldBe 48
         discrete.start shouldBe 0.0f
         env.close()
     }
 
-    "Taxi-v3 should have an expected initial observation" {
-        val env = RemoteEnv("Taxi-v3")
+    "CliffWalking-v0 should have an expected initial observation" {
+        val env = RemoteEnv("CliffWalking-v0")
         val (observation, info) = env.reset(seed = 123)
         observation.valueCase shouldBe INT32
-        observation.int32 shouldBe 341
+        observation.int32 shouldBe 36
 
         info shouldNotBe null
         info.dataMap shouldBe emptyMap()
@@ -39,8 +38,8 @@ class TaxiV3DiscoveryTest : StringSpec({
         env.close()
     }
 
-    "Taxi-v3 should have metadata" {
-        val env = RemoteEnv("Taxi-v3")
+    "CliffWalking-v0 should have metadata" {
+        val env = RemoteEnv("CliffWalking-v0")
         env.metadata shouldNotBe null
         val renderFps = env.metadata.fieldsMap["render_fps"]?.numberValue
         renderFps shouldBe 4.0
@@ -49,7 +48,7 @@ class TaxiV3DiscoveryTest : StringSpec({
             ?.valuesList
             ?.mapNotNull { it.stringValue }
             ?: emptyList()
-        renderModes shouldBe listOf("human", "ansi", "rgb_array")
+        renderModes shouldBe listOf("human", "rgb_array", "ansi")
         env.close()
     }
 })

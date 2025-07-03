@@ -1,4 +1,4 @@
-package org.kotlinrl.open.env
+package io.github.kotlinrl.open.env
 
 import com.google.protobuf.Struct
 import io.grpc.*
