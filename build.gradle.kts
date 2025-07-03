@@ -6,6 +6,7 @@ plugins {
     id("com.google.protobuf") version "0.9.4"
     id("com.avast.gradle.docker-compose") version "0.17.12"
     id("com.vanniktech.maven.publish") version "0.33.0"
+    id("pl.allegro.tech.build.axion-release") version "1.18.7"
 }
 
 repositories {
@@ -13,8 +14,15 @@ repositories {
 }
 
 group = "io.github.kotlinrl"
-version = "0.1.0-SNAPSHOT"
 description = "Kotlin gRPC + Protobuf Client library for Reinforcement Learning with Open RL gRPC Servers"
+
+scmVersion {
+    tag {
+        prefix = ""
+    }
+}
+
+project.version = scmVersion.version
 
 dependencies {
     implementation(kotlin("stdlib"))
