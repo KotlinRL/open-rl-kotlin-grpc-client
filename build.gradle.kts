@@ -2,7 +2,7 @@ import com.google.protobuf.gradle.id
 import org.gradle.kotlin.dsl.proto
 
 plugins {
-    kotlin("jvm") version "1.9.21"
+    kotlin("jvm") version "2.2.0"
     id("com.google.protobuf") version "0.9.4"
     id("com.avast.gradle.docker-compose") version "0.17.12"
     id("com.vanniktech.maven.publish") version "0.33.0"
