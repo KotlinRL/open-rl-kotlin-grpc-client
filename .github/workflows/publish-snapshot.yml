@@ -3,12 +3,12 @@ name: Publish Snapshot from Main
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   publish-snapshot:
     # Only run on *direct push* to main (not PRs or tags)
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
