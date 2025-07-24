@@ -1,0 +1,42 @@
+name: Publish Snapshot from Main
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish-snapshot:
+    # Only run on *direct push* to main (not PRs or tags)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - run: git fetch --tags
+
+      - name: Show current Git tag and describe
+        run: |
+          git tag --list
+          git describe --tags --always
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Verify current version
+        run: ./gradlew currentVersion
+
+      - name: Publish Release to Maven Central
+        run: ./gradlew --no-daemon publishToMavenCentral
+        env:
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRET_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_TOKEN_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_TOKEN_PASSWORD }}

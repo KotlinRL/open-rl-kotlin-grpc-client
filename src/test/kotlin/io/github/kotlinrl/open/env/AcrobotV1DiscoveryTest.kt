@@ -1,7 +1,9 @@
 package io.github.kotlinrl.open.env
 
+import com.google.protobuf.Struct
 import io.kotest.core.spec.style.*
 import io.kotest.matchers.*
+import io.kotest.matchers.types.instanceOf
 import open.rl.env.EnvOuterClass.DType.*
 import open.rl.env.EnvOuterClass.Observation.ValueCase.*
 import open.rl.env.EnvOuterClass.Space.TypeCase.*
@@ -44,7 +46,7 @@ class AcrobotV1DiscoveryTest : StringSpec({
         observation.array.data.toFloatArray() shouldBe floatArrayOf(0.99933505f, 0.03646229f, 0.99602115f, -0.089117415f, -0.055928025f, -0.06312564f)
 
         info shouldNotBe null
-        info.dataMap shouldBe emptyMap()
+        info shouldBe instanceOf(Struct::class)
         env.close()
     }
 

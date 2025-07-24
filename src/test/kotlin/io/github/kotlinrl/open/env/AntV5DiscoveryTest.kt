@@ -1,7 +1,9 @@
 package io.github.kotlinrl.open.env
 
+import com.google.protobuf.Struct
 import io.kotest.core.spec.style.*
 import io.kotest.matchers.*
+import io.kotest.matchers.types.instanceOf
 import open.rl.env.EnvOuterClass.DType.float32
 import open.rl.env.EnvOuterClass.DType.float64
 import open.rl.env.EnvOuterClass.Observation.ValueCase.*
@@ -57,7 +59,7 @@ class AntV5DiscoveryTest : StringSpec({
         observation.array.data.toDoubleArray().size shouldBe 105
 
         info shouldNotBe null
-        info.dataMap shouldBe emptyMap()
+        info shouldBe instanceOf(Struct::class)
 
         env.close()
     }

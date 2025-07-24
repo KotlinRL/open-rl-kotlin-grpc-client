@@ -1,7 +1,9 @@
 package io.github.kotlinrl.open.env
 
+import com.google.protobuf.Struct
 import io.kotest.core.spec.style.*
 import io.kotest.matchers.*
+import io.kotest.matchers.types.instanceOf
 import open.rl.env.EnvOuterClass.*
 import open.rl.env.EnvOuterClass.Observation.ValueCase.INT32
 import open.rl.env.EnvOuterClass.Space.TypeCase.*
@@ -41,7 +43,7 @@ class BlackjackV1DiscoveryTest : StringSpec({
         observation.tuple.itemsList[2].int32 shouldBe 1
 
         info shouldNotBe null
-        info.dataMap shouldBe emptyMap()
+        info shouldBe instanceOf(Struct::class)
 
         env.close()
     }

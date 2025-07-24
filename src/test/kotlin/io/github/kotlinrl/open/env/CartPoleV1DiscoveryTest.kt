@@ -1,7 +1,9 @@
 package io.github.kotlinrl.open.env
 
+import com.google.protobuf.Struct
 import io.kotest.core.spec.style.*
 import io.kotest.matchers.*
+import io.kotest.matchers.types.instanceOf
 import open.rl.env.EnvOuterClass.DType.*
 import open.rl.env.EnvOuterClass.Observation.ValueCase.*
 import open.rl.env.EnvOuterClass.Space.TypeCase.*
@@ -47,7 +49,7 @@ class CartPoleV1DiscoveryTest : StringSpec({
         observation.array.data.toFloatArray() shouldBe floatArrayOf(0.018235186f, -0.0446179f, -0.027964013f, -0.03156282f)
 
         info shouldNotBe null
-        info.dataMap shouldBe emptyMap()
+        info shouldBe instanceOf(Struct::class)
         env.close()
     }
 

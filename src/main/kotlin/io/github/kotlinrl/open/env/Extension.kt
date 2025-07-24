@@ -1,6 +1,7 @@
 package io.github.kotlinrl.open.env
 
 import com.google.protobuf.ByteString
+import com.google.protobuf.Struct
 import open.rl.env.EnvOuterClass.*
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -9,10 +10,10 @@ operator fun StepResponse.component1(): Observation = observation
 operator fun StepResponse.component2() = reward
 operator fun StepResponse.component3() = terminated
 operator fun StepResponse.component4() = truncated
-operator fun StepResponse.component5(): Info = info
+operator fun StepResponse.component5(): Struct = info
 
 operator fun ResetResponse.component1(): Observation = observation
-operator fun ResetResponse.component2(): Info = info
+operator fun ResetResponse.component2(): Struct = info
 
 
 fun ByteString.toFloatArray(): FloatArray {
