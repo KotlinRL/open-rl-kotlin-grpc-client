@@ -18,7 +18,7 @@ description = "Kotlin gRPC + Protobuf Client library for Reinforcement Learning 
 
 scmVersion {
     tag {
-        prefix = ""
+        prefix = "v"
     }
 }
 

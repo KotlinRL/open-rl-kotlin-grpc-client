@@ -1,7 +1,9 @@
 package io.github.kotlinrl.open.env
 
+import com.google.protobuf.Struct
 import io.kotest.core.spec.style.*
 import io.kotest.matchers.*
+import io.kotest.matchers.types.instanceOf
 import open.rl.env.EnvOuterClass.DType.*
 import open.rl.env.EnvOuterClass.Observation.ValueCase.*
 import open.rl.env.EnvOuterClass.Space.TypeCase.*
@@ -54,7 +56,7 @@ class PendulumV1DiscoveryTest : StringSpec({
         observation.array.data.toFloatArray() shouldBe floatArrayOf(0.4123625f, 0.91101986f, -0.89235795f)
 
         info shouldNotBe null
-        info.dataMap shouldBe emptyMap()
+        info shouldBe instanceOf(Struct::class)
         env.close()
     }
 

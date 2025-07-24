@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit.*
 class RemoteEnv(
     envName: String,
     private val render: Boolean = true,
-    options: Map<String, String> = emptyMap(),
+    options: Struct = Struct.getDefaultInstance(),
     target: String = "localhost:50051"
 ) {
     private val channel: ManagedChannel = forTarget(target)
@@ -35,7 +35,7 @@ class RemoteEnv(
                 MakeRequest.newBuilder()
                     .setEnvId(envName)
                     .setRender(render)
-                    .putAllOptions(options)
+                    .setOptions(options)
                     .build()
             )
             clientId = made.envHandle
@@ -55,10 +55,10 @@ class RemoteEnv(
         }
     }
 
-    fun reset(seed: Int? = null, options: Map<String, String>? = null): ResetResponse = runBlocking {
+    fun reset(seed: Int? = null, options: Struct? = null): ResetResponse = runBlocking {
         val builder = ResetRequest.newBuilder().setEnvHandle(clientId)
         seed?.let { builder.setSeed(it) }
-        options?.let { builder.putAllOptions(it) }
+        options?.let { builder.setOptions(it) }
         stub.reset(builder.build())
     }
 

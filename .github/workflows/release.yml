@@ -1,9 +1,11 @@
-name: Release
-
+name: Manual Release
 on:
-  push:
-    tags:
-      - 'v*' # Triggers only on new tags starting with "v"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g. 1.2.0)'
+        required: true
+        type: string
 
 jobs:
   release:
@@ -13,8 +15,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Important for git tags/history!
+          fetch-depth: 0
           submodules: recursive
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -30,8 +33,21 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             gradle-${{ runner.os }}-
+
+      - name: Configure Git user
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Create Git tag and bump version
+        run: ./gradlew release -Prelease.version=${{ github.event.inputs.version }}
+
+      - name: Push tag to origin
+        run: git push --follow-tags
+
       - name: Build and Test
         run: ./gradlew --no-daemon clean build
+
       - name: Publish Release to Maven Central
         run: ./gradlew --no-daemon publishToMavenCentral
         env:
